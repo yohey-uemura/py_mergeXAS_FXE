@@ -46,21 +46,47 @@ class Ui(qt.QMainWindow):
         self.u.widget_3.setLayout(layout)
         layout.addWidget(self.hist)
 
+
+        def changeHeaders():
+            if self.u.tabWidget.currentIndex() == 0:
+                self.u.tableWidget.item(0, 0).setText('#Energy [eV]')
+                self.u.tableWidget.item(0, 1).setText('#PPODL [ps]')
+                print (self.u.tableWidget.itemAt(0, 0).text())
+            elif self.u.tabWidget.currentIndex() == 1:
+                self.u.tableWidget.item(0, 0).setText('Energy')
+                self.u.tableWidget.item(0, 1).setText('#motor')
+
+        self.u.tabWidget.currentChanged.connect(changeHeaders)
+
         def reloadDir():
             _dir = self.u.textBrowser.toPlainText()
-            ch = self.u.ch2A.isChecked() * '2_A' + self.u.ch2B.isChecked() * '2_B'
-            if _dir and os.path.isdir(_dir):
-                self.u.textBrowser.clear()
-                self.u.textBrowser.append(_dir)
-                print (f'{ch}.csv')
-                files = [x.split('_')[0] for x in os.listdir(_dir) if f'{ch}.csv' in x]
-                self.u.listWidget.clear()
-                if files:
-                    self.u.listWidget.addItems(natsort.natsorted(files))
+            if self.u.tabWidget.currentIndex() == 0:
+                ch = self.u.ch2A.isChecked() * '2_A' + self.u.ch2B.isChecked() * '2_B'
+                if _dir and os.path.isdir(_dir):
+                    self.u.textBrowser.clear()
+                    self.u.textBrowser.append(_dir)
+                    print (f'{ch}.csv')
+                    files = [x.split('_')[0] for x in os.listdir(_dir) if f'{ch}.csv' in x]
+                    self.u.listWidget.clear()
+                    if files:
+                        self.u.listWidget.addItems(natsort.natsorted(files))
+                    else:
+                        msg("Please select a directory which includes tiff files ;_;").exec_()
                 else:
-                    msg("Please select a directory which includes tiff files ;_;").exec_()
-            else:
-                msg("!! You did not select a directory :(").exec_()
+                    msg("!! You did not select a directory :(").exec_()
+            elif self.u.tabWidget.currentIndex() == 1:
+                ch = self.u.rb_pd.isChecked() * '' + self.u.rb_mpccd.isChecked() * 'mpccd'
+                if _dir and os.path.isdir(_dir):
+                    self.u.textBrowser.clear()
+                    self.u.textBrowser.append(_dir)
+                    dirs = [x for x in os.listdir(_dir) if os.path.isdir(_dir+'/'+x) and re.match('r\d+',x)]
+                    self.u.listWidget.clear()
+                    if dirs:
+                        self.u.listWidget.addItems(natsort.natsorted(dirs))
+                    else:
+                        msg("Please select a directory which includes tiff files ;_;").exec_()
+                else:
+                    msg("!! You did not select a directory :(").exec_()
 
 
         def selectDir():
@@ -81,36 +107,56 @@ class Ui(qt.QMainWindow):
 
         def plot_multi_runs():
             self.hist.clear()
-            ch = self.u.ch2A.isChecked() * '2_A' + self.u.ch2B.isChecked() * '2_B'
-            datdir = self.u.textBrowser.toPlainText()
-            ext = f'I0_2_C_If_{ch}'
+            if self.u.tabWidget.currentIndex() == 0:
+                ch = self.u.ch2A.isChecked() * '2_A' + self.u.ch2B.isChecked() * '2_B'
+                ext = f'I0_2_C_If_{ch}'
+                xlabel = self.u.tableWidget.item(0, 0).text() * (self.u.radioButton.isChecked())+ \
+                         self.u.tableWidget.item(0, 1).text() * (self.u.radioButton_2.isChecked())
+                ylabel_diff = (f'{self.u.tableWidget.item(0, 4).text()}:{ch}')
+                ylabel_on = (f'{self.u.tableWidget.item(0, 2).text()}:{ch}')
+                ylabel_off = (f'{self.u.tableWidget.item(0, 3).text()}:{ch}')
+                GraphXLabel = 'Energy (eV)'*self.u.radioButton.isChecked() + 'PPODL (ps)'*self.u.radioButton_2.isChecked()
+                GraphYLabel = self.u.rb_diff.isChecked() * 'diff'+ \
+                         self.u.rb_on.isChecked() * 'XAS'+ \
+                         self.u.rb_off.isChecked() * 'XAS'
+
+            else:
+                ch = self.u.rb_pd.isChecked() * '' + self.u.rb_mpccd.isChecked() * '_mpccd'
+                ext = self.u.rb_seng.isChecked()*'escan'+self.u.rb_sdelay.isChecked()*'mscan'+f'{ch}'
+                xlabel = self.u.tableWidget.item(0, 0).text() * (self.u.rb_seng.isChecked()) + \
+                         self.u.tableWidget.item(0, 1).text() * (self.u.rb_sdelay.isChecked())
+                ylabel_diff = (f'{self.u.tableWidget.item(0, 4).text()}')
+                ylabel_on = (f'{self.u.tableWidget.item(0, 2).text()}')
+                ylabel_off = (f'{self.u.tableWidget.item(0, 3).text()}')
+                GraphXLabel = 'Energy (eV)' * self.u.rb_seng.isChecked() + 'PPODL (ps)' * self.u.rb_sdelay.isChecked()
+                GraphYLabel = self.u.rb_diff.isChecked() * 'diff' + \
+                              self.u.rb_on.isChecked() * 'XAS' + \
+                              self.u.rb_off.isChecked() * 'XAS'
             try:
+                datdir = self.u.textBrowser.toPlainText()
                 items = [x.text() for x in self.u.listWidget_2.selectedItems()]
-                label = self.u.rb_diff.isChecked()*(f'diff:{ch}')+ \
-                        self.u.rb_on.isChecked() * (f'xas_on:{ch}') + \
-                        self.u.rb_off.isChecked() * (f'xas_off:{ch}')
-                if self.u.radioButton.isChecked():
-                    for _f in items:
-                        try:
-                            df = pd.read_csv(f'{datdir}/{_f}_{ext}.csv',delim_whitespace=True)
-                            self.hist.addCurve(df['#Energy [eV]'],df[label],linewidth=1.5,symbol='.',legend=_f)
-                        except Exception as e:
-                            print (f"Error for '_f': str{e}")
-                    self.hist.setGraphXLabel('Energy /eV')
 
-                    self.hist.setGraphYLabel('XAS')
+                for _f in items:
+                    _datdir = datdir if self.u.tabWidget.currentIndex() == 0 else f'{datdir}/{_f}'
+                    try:
+                        df = pd.read_csv(f'{_datdir}/{_f}_{ext}.csv', delim_whitespace=True)
+                        if self.u.rb_diff.isChecked():
+                            self.hist.addCurve(df[xlabel],df[ylabel_on]-df[ylabel_off],linewidth=1.5,symbol='.',legend=_f)
+                        elif self.u.rb_on.isChecked():
+                            self.hist.addCurve(df[xlabel],df[ylabel_on],linewidth=1.5,symbol='.',legend=_f)
+                        elif self.u.rb_off.isChecked():
+                            self.hist.addCurve(df[xlabel],df[ylabel_off],linewidth=1.5,symbol='.',legend=_f)
+                    except Exception as e:
+                        print (f"Error for '_f': str{e}")
+                self.hist.setGraphXLabel(GraphXLabel)
+                self.hist.setGraphYLabel(GraphYLabel)
 
-                elif self.u.radioButton_2.isChecked():
-                    for _f in items:
-                        try:
-                            df = pd.read_csv(f'{datdir}/{_f}_{ext}.csv', delim_whitespace=True)
-                            self.hist.addCurve(df['#PPODL [ps]'], df[label], linewidth=1.5, symbol='.', legend=_f)
-                        except Exception as e:
-                            print(f"Error for '_f': str{e}")
-                    self.hist.setGraphXLabel('PPODL /ps')
-                    self.hist.setGraphYLabel('XAS')
             except Exception as e:
                 print(f"Error: str{e}")
+
+        self.u.rb_diff.clicked.connect(plot_multi_runs)
+        self.u.rb_on.clicked.connect(plot_multi_runs)
+        self.u.rb_off.clicked.connect(plot_multi_runs)
 
         def setItems_combobox2():
             if self.u.listWidget_2.selectedItems():
@@ -142,33 +188,49 @@ class Ui(qt.QMainWindow):
 
         def plot_single_run(rnum):
             if rnum:
+                if self.u.tabWidget.currentIndex() == 0:
+                    ch = self.u.ch2A.isChecked() * '2_A' + self.u.ch2B.isChecked() * '2_B'
+                    datdir = self.u.textBrowser.toPlainText()
+                    ext = f'I0_2_C_If_{ch}'
+                    xlabel = self.u.tableWidget.item(0, 0).text() * (self.u.radioButton.isChecked()) + \
+                             self.u.tableWidget.item(0, 1).text() * (self.u.radioButton_2.isChecked())
+                    ylabel_diff = (f'{self.u.tableWidget.item(0, 4).text()}:{ch}')
+                    ylabel_on = (f'{self.u.tableWidget.item(0, 2).text()}:{ch}')
+                    ylabel_off = (f'{self.u.tableWidget.item(0, 3).text()}:{ch}')
+                    GraphXLabel = 'Energy (eV)' * self.u.radioButton.isChecked() + 'PPODL (ps)' * self.u.radioButton_2.isChecked()
+                    # GraphYLabel = self.u.rb_diff.isChecked() * 'diff' + \
+                    #               self.u.rb_on.isChecked() * 'XAS' + \
+                    #               self.u.rb_off.isChecked() * 'XAS'
+
+                else:
+                    ch = self.u.rb_pd.isChecked() * '' + self.u.rb_mpccd.isChecked() * '_mpccd'
+                    ext = self.u.rb_seng.isChecked() * 'escan' + self.u.rb_sdelay.isChecked() * 'mscan' + f'{ch}'
+                    xlabel = self.u.tableWidget.item(0, 0).text() * (self.u.rb_seng.isChecked()) + \
+                             self.u.tableWidget.item(0, 1).text() * (self.u.rb_sdelay.isChecked())
+                    ylabel_diff = (f'{self.u.tableWidget.item(0, 4).text()}')
+                    ylabel_on = (f'{self.u.tableWidget.item(0, 2).text()}')
+                    ylabel_off = (f'{self.u.tableWidget.item(0, 3).text()}')
+                    GraphXLabel = 'Energy (eV)' * self.u.rb_seng.isChecked() + 'PPODL (ps)' * self.u.rb_sdelay.isChecked()
+                    # GraphYLabel = self.u.rb_diff.isChecked() * 'diff' + \
+                    #               self.u.rb_on.isChecked() * 'XAS' + \
+                    #               self.u.rb_off.isChecked() * 'XAS'
+
                 datdir = self.u.textBrowser.toPlainText()
-                ch = self.u.ch2A.isChecked() * '2_A' + self.u.ch2B.isChecked() * '2_B'
-                ext = f'I0_2_C_If_{ch}'
+                _datdir = datdir if self.u.tabWidget.currentIndex() == 0 else f'{datdir}/{rnum}'
                 file = f'{rnum}_{ext}.csv'
-                if not os.path.isfile(datdir+'/'+file):
+                if not os.path.isfile(_datdir+'/'+file):
                     msg(f"!! <i><font color='red'>{file}</font> </i> files are not found. You do not select the scan type properly... :(").exec_()
                     return
                 try:
-                    df = pd.read_csv(datdir+'/'+file,delim_whitespace=True)
+                    df = pd.read_csv(_datdir+'/'+file,delim_whitespace=True)
 
-                    if self.u.radioButton_2.isChecked():
-                        self.raw_plot.addCurve(df['#PPODL [ps]'],df[f'xas_on:{ch}'],color='red',linewidth=1.5,symbol='.',legend='On')
-                        self.raw_plot.addCurve(df['#PPODL [ps]'], df[f'xas_off:{ch}'],color='blue',linewidth=1.5,symbol='.',legend='Off')
-                        self.raw_plot.addCurve(df['#PPODL [ps]'],df[f'xas_on:{ch}']-df[f'xas_off:{ch}'],yaxis='right',color='green',linewidth=1.5,symbol='.',legend='diff')
-                        self.raw_plot.setGraphXLabel('PPODL /ps')
-                        self.raw_plot.setGraphYLabel('XAS')
-                        self.raw_plot.setGraphYLabel('$\Delta$XAS',axis='right')
-                        self.raw_plot.setGraphTitle(f'{rnum}')
-
-                    elif self.u.radioButton.isChecked():
-                        self.raw_plot.addCurve(df['#Energy [eV]'], df[f'xas_on:{ch}'], color='red',linewidth=1.5,symbol='.', legend='On')
-                        self.raw_plot.addCurve(df['#Energy [eV]'], df[f'xas_off:{ch}'], color='blue',linewidth=1.5,symbol='.', legend='Off')
-                        self.raw_plot.addCurve(df['#Energy [eV]'], df[f'xas_on:{ch}'] - df[f'xas_off:{ch}'], yaxis='right', color='green',linewidth=1.5,symbol='.',legend='diff')
-                        self.raw_plot.setGraphXLabel('Energy /eV')
-                        self.raw_plot.setGraphYLabel('XAS')
-                        self.raw_plot.setGraphYLabel('$\Delta$XAS', axis='right')
-                        self.raw_plot.setGraphTitle(f'{rnum}')
+                    self.raw_plot.addCurve(df[xlabel], df[ylabel_on], color='red', linewidth=1.5,symbol='.', legend='On')
+                    self.raw_plot.addCurve(df[xlabel], df[ylabel_off], color='blue', linewidth=1.5,symbol='.', legend='Off')
+                    self.raw_plot.addCurve(df[xlabel], df[ylabel_on] - df[ylabel_off], yaxis='right',color='green', linewidth=1.5, symbol='.', legend='diff')
+                    self.raw_plot.setGraphXLabel(GraphXLabel)
+                    self.raw_plot.setGraphYLabel('XAS')
+                    self.raw_plot.setGraphYLabel('$\Delta$XAS', axis='right')
+                    self.raw_plot.setGraphTitle(f'{rnum}')
 
                 except Exception as e:
                     msg(f"!! {str(e)}").exec_()
@@ -178,62 +240,61 @@ class Ui(qt.QMainWindow):
 
 
         def merge():
-            if self.u.comboBox.currentText():
+            if self.u.comboBox_2.currentText():
                 rnum = self.u.comboBox_2.currentText()
                 ch = self.u.ch2A.isChecked() * '2_A' + self.u.ch2B.isChecked() * '2_B'
                 datdir = self.u.textBrowser.toPlainText()
-                ext = f'I0_2_C_If_{ch}'
-                items = [x.text() for x in self.u.listWidget_2.selectedItems()]
+                _datdir = datdir if self.u.tabWidget.currentIndex() == 0 else f'{datdir}/{rnum}'
+
+                if self.u.tabWidget.currentIndex() == 0:
+                    ch = self.u.ch2A.isChecked() * '2_A' + self.u.ch2B.isChecked() * '2_B'
+                    ext = f'I0_2_C_If_{ch}'
+                    xlabel = self.u.tableWidget.item(0, 0).text() * (self.u.radioButton.isChecked())+ \
+                             self.u.tableWidget.item(0, 1).text() * (self.u.radioButton_2.isChecked())
+                    ylabel_diff = (f'{self.u.tableWidget.item(0, 4).text()}:{ch}')
+                    ylabel_on = (f'{self.u.tableWidget.item(0, 2).text()}:{ch}')
+                    ylabel_off = (f'{self.u.tableWidget.item(0, 3).text()}:{ch}')
+                    GraphXLabel = 'Energy (eV)'*self.u.radioButton.isChecked() + 'PPODL (ps)'*self.u.radioButton_2.isChecked()
+                    GraphYLabel = self.u.rb_diff.isChecked() * 'diff'+ \
+                             self.u.rb_on.isChecked() * 'XAS'+ \
+                             self.u.rb_off.isChecked() * 'XAS'
+
+                else:
+                    ch = self.u.rb_pd.isChecked() * '' + self.u.rb_mpccd.isChecked() * '_mpccd'
+                    ext = self.u.rb_seng.isChecked()*'escan'+self.u.rb_sdelay.isChecked()*'mscan'+f'{ch}'
+                    xlabel = self.u.tableWidget.item(0, 0).text() * (self.u.rb_seng.isChecked()) + \
+                             self.u.tableWidget.item(0, 1).text() * (self.u.rb_sdelay.isChecked())
+                    ylabel_diff = (f'{self.u.tableWidget.item(0, 4).text()}')
+                    ylabel_on = (f'{self.u.tableWidget.item(0, 2).text()}')
+                    ylabel_off = (f'{self.u.tableWidget.item(0, 3).text()}')
+                    GraphXLabel = 'Energy (eV)' * self.u.rb_seng.isChecked() + 'PPODL (ps)' * self.u.rb_sdelay.isChecked()
+                    GraphYLabel = self.u.rb_diff.isChecked() * 'diff' + \
+                                  self.u.rb_on.isChecked() * 'XAS' + \
+                                  self.u.rb_off.isChecked() * 'XAS'
+
                 xas_on, xas_off = [], []
-                df_model = pd.read_csv(datdir+'/'+f'{rnum}_{ext}.csv',delim_whitespace=True)
-                if self.u.radioButton.isChecked():
-                    x = df_model['#Energy [eV]'].values
-                    for _f in items:
-                        try:
-                            _datdir = self.u.textBrowser.toPlainText()
-                            df = pd.read_csv(f'{_datdir}/{_f}_{ext}.csv',delim_whitespace=True)
-                            func = interp1d(df['#Energy [eV]'].values,df[f'xas_on:{ch}'].values,bounds_error=False)
-                            xas_on.append(func(x))
-                            func = interp1d(df['#Energy [eV]'].values, df[f'xas_off:{ch}'].values, bounds_error=False)
-                            xas_off.append(func(x))
-                        except Exception as e:
-                            print (f"Error for '_f': str{e}")
-                    try:
-                        xas_on = np.array(xas_on)
-                        xas_off = np.array(xas_off)
-                        self.conv_plot.addCurve(x, np.nanmean(xas_on,axis=0), color='red',linewidth=1.5,symbol='.',legend='On')
-                        self.conv_plot.addCurve(x, np.nanmean(xas_off, axis=0),color='blue',linewidth=1.5,symbol='.',legend='Off')
-                        self.conv_plot.addCurve(x, np.nanmean(xas_on,axis=0)-np.nanmean(xas_off, axis=0), color='green',yaxis='right',linewidth=1.5,symbol='.',legend='diff')
-                        self.conv_plot.setGraphXLabel('Energy /eV')
-                        self.conv_plot.setGraphYLabel('XAS')
-                        self.conv_plot.setGraphYLabel('$\Delta$XAS', axis='right')
-                    except Exception as e:
-                        msg("!! {str(e)}").exec_()
+                df_model = pd.read_csv(_datdir + '/' + f'{rnum}_{ext}.csv', delim_whitespace=True)
 
-                elif self.u.radioButton_2.isChecked():
-                    x = df_model['#PPODL [ps]'].values
+                try:
+                    datdir = self.u.textBrowser.toPlainText()
+                    items = [x.text() for x in self.u.listWidget_2.selectedItems()]
+                    x = df_model[xlabel].values
                     for _f in items:
-                        try:
-                            _datdir = self.u.textBrowser.toPlainText()
-                            df = pd.read_csv(f'{_datdir}/{_f}_{ext}.csv',delim_whitespace=True)
-                            func = interp1d(df['#PPODL [ps]'].values,df[f'xas_on:{ch}'].values,bounds_error=False)
-                            xas_on.append(func(x))
-                            func = interp1d(df['#PPODL [ps]'].values, df[f'xas_off:{ch}'].values, bounds_error=False)
-                            xas_off.append(func(x))
-                        except Exception as e:
-                            print (f"Error for '_f': str{e}")
+                        _datdir = datdir if self.u.tabWidget.currentIndex() == 0 else f'{datdir}/{_f}'
+                        df = pd.read_csv(f'{_datdir}/{_f}_{ext}.csv', delim_whitespace=True)
+                        func = interp1d(df[xlabel].values, df[ylabel_on].values, bounds_error=False)
+                        xas_on.append(func(x))
+                        func = interp1d(df[xlabel].values, df[ylabel_off].values, bounds_error=False)
+                        xas_off.append(func(x))
 
-                    try:
-                        xas_on = np.array(xas_on)
-                        xas_off = np.array(xas_off)
-                        self.conv_plot.addCurve(x, np.nanmean(xas_on, axis=0), color='red',linewidth=1.5,symbol='.', legend='On')
-                        self.conv_plot.addCurve(x, np.nanmean(xas_off, axis=0), color='blue',linewidth=1.5,symbol='.',legend='Off')
-                        self.conv_plot.addCurve(x, np.nanmean(xas_on, axis=0) - np.nanmean(xas_off, axis=0), color='green',yaxis='right',linewidth=1.5,symbol='.',legend='diff')
-                        self.conv_plot.setGraphXLabel('PPODL /ps')
-                        self.conv_plot.setGraphYLabel('XAS')
-                        self.conv_plot.setGraphYLabel('$\Delta$XAS',axis='right')
-                    except Exception as e:
-                        msg(f"!! {str(e)}").exec_()
+                    xas_on = np.array(xas_on)
+                    xas_off = np.array(xas_off)
+                    self.conv_plot.addCurve(x, np.nanmean(xas_on, axis=0), color='red', linewidth=1.5, symbol='.',legend='On')
+                    self.conv_plot.addCurve(x, np.nanmean(xas_off, axis=0), color='blue', linewidth=1.5, symbol='.',legend='Off')
+                    self.conv_plot.addCurve(x, np.nanmean(xas_on, axis=0) - np.nanmean(xas_off, axis=0), color='green',yaxis='right', linewidth=1.5, symbol='.', legend='diff')
+
+                except Exception as e:
+                    msg("!! {str(e)}").exec_()
 
         def savedata():
             if os.path.isdir(self.u.textBrowser.toPlainText()):
