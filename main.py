@@ -142,11 +142,11 @@ class Ui(qt.QMainWindow):
                     try:
                         df = pd.read_csv(f'{_datdir}/{_f}_{ext}.csv', delim_whitespace=True)
                         if self.u.rb_diff.isChecked():
-                            self.hist.addCurve(df[xlabel],df[ylabel_on]-df[ylabel_off],linewidth=1.5,symbol='.',legend=_f)
+                            self.hist.addCurve(df[xlabel],(df[ylabel_on]-df[ylabel_off])*alpha,linewidth=1.5,symbol='.',legend=_f)
                         elif self.u.rb_on.isChecked():
-                            self.hist.addCurve(df[xlabel],df[ylabel_on],linewidth=1.5,symbol='.',legend=_f)
+                            self.hist.addCurve(df[xlabel],df[ylabel_on]*alpha,linewidth=1.5,symbol='.',legend=_f)
                         elif self.u.rb_off.isChecked():
-                            self.hist.addCurve(df[xlabel],df[ylabel_off],linewidth=1.5,symbol='.',legend=_f)
+                            self.hist.addCurve(df[xlabel],df[ylabel_off]*alpha,linewidth=1.5,symbol='.',legend=_f)
                     except Exception as e:
                         print (f"Error for '_f': str{e}")
                 self.hist.setGraphXLabel(GraphXLabel)
