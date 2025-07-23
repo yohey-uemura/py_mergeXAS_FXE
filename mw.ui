@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1831</width>
-    <height>1135</height>
+    <width>1710</width>
+    <height>1040</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -382,7 +382,7 @@
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
-                  <height>450</height>
+                  <height>400</height>
                  </size>
                 </property>
                 <property name="selectionMode">
@@ -549,7 +549,7 @@
           <property name="frameShadow">
            <enum>QFrame::Sunken</enum>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_6">
+          <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
             <widget class="QGroupBox" name="groupBox_3">
              <property name="title">
@@ -597,19 +597,113 @@
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
-             <widget class="QWidget" name="widget_3" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
+             <widget class="QFrame" name="frame_5">
               <property name="minimumSize">
                <size>
-                <width>500</width>
-                <height>200</height>
+                <width>0</width>
+                <height>350</height>
                </size>
               </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_15">
+               <item>
+                <widget class="QWidget" name="widget_3" native="true">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>500</width>
+                   <height>200</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QTableWidget" name="tableWidget_2">
+                 <property name="rowCount">
+                  <number>10</number>
+                 </property>
+                 <property name="columnCount">
+                  <number>2</number>
+                 </property>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <row/>
+                 <column>
+                  <property name="text">
+                   <string>scale</string>
+                  </property>
+                 </column>
+                 <column/>
+                 <item row="0" column="0">
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item row="1" column="0">
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item row="2" column="0">
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item row="3" column="0">
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item row="4" column="0">
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item row="5" column="0">
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item row="6" column="0">
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item row="7" column="0">
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item row="8" column="0">
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                 <item row="9" column="0">
+                  <property name="text">
+                   <string>1</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+              </layout>
              </widget>
              <widget class="QWidget" name="widget" native="true">
               <property name="sizePolicy">
@@ -656,43 +750,55 @@
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
                <widget class="QListWidget" name="listWidget_2">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>250</height>
+                 </size>
+                </property>
                 <property name="selectionMode">
                  <enum>QAbstractItemView::MultiSelection</enum>
                 </property>
                </widget>
               </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QFrame" name="frame_4">
-             <property name="frameShape">
-              <enum>QFrame::Panel</enum>
-             </property>
-             <property name="frameShadow">
-              <enum>QFrame::Sunken</enum>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_9">
               <item>
-               <widget class="QComboBox" name="comboBox_2"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_3">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
+               <widget class="QFrame" name="frame_4">
+                <property name="frameShape">
+                 <enum>QFrame::Panel</enum>
                 </property>
-                <property name="text">
-                 <string>Merge</string>
+                <property name="frameShadow">
+                 <enum>QFrame::Sunken</enum>
                 </property>
-                <property name="iconSize">
-                 <size>
-                  <width>60</width>
-                  <height>60</height>
-                 </size>
-                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
+                 <item>
+                  <widget class="QComboBox" name="comboBox_2"/>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButton_3">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Merge</string>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>60</width>
+                     <height>60</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
@@ -701,7 +807,7 @@
            <item>
             <widget class="QWidget" name="widget_2" native="true">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -709,32 +815,9 @@
              <property name="minimumSize">
               <size>
                <width>500</width>
-               <height>500</height>
+               <height>450</height>
               </size>
              </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QFrame" name="frame_11">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>200</height>
-              </size>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
-             </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_3"/>
             </widget>
            </item>
            <item>
@@ -783,8 +866,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1831</width>
-     <height>24</height>
+     <width>1710</width>
+     <height>38</height>
     </rect>
    </property>
   </widget>

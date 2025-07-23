@@ -136,8 +136,9 @@ class Ui(qt.QMainWindow):
                 datdir = self.u.textBrowser.toPlainText()
                 items = [x.text() for x in self.u.listWidget_2.selectedItems()]
 
-                for _f in items:
+                for k, _f in enumerate(items):
                     _datdir = datdir if self.u.tabWidget.currentIndex() == 0 else f'{datdir}/{_f}'
+                    alpha = float(self.u.tableWidget_2.item(k, 0).text()) if k < 10 else 1
                     try:
                         df = pd.read_csv(f'{_datdir}/{_f}_{ext}.csv', delim_whitespace=True)
                         if self.u.rb_diff.isChecked():
