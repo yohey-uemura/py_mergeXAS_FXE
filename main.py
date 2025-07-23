@@ -328,4 +328,5 @@ class Ui(qt.QMainWindow):
 
 if __name__ == '__main__':
     mw = Ui()
+    mw.setWindowTitle('merge XAS at FXE')
     app.exec_()
