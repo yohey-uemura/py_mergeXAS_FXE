@@ -115,6 +115,8 @@ class Ui(qt.QMainWindow):
                 ylabel_diff = (f'{self.u.tableWidget.item(0, 4).text()}:{ch}')
                 ylabel_on = (f'{self.u.tableWidget.item(0, 2).text()}:{ch}')
                 ylabel_off = (f'{self.u.tableWidget.item(0, 3).text()}:{ch}')
+                elabel_on = (f'{self.u.tableWidget.item(0, 5).text()}:{ch}')
+                elabel_off = (f'{self.u.tableWidget.item(0, 6).text()}:{ch}')
                 GraphXLabel = 'Energy (eV)'*self.u.radioButton.isChecked() + 'PPODL (ps)'*self.u.radioButton_2.isChecked()
                 GraphYLabel = self.u.rb_diff.isChecked() * 'diff'+ \
                          self.u.rb_on.isChecked() * 'XAS'+ \
@@ -128,6 +130,8 @@ class Ui(qt.QMainWindow):
                 ylabel_diff = (f'{self.u.tableWidget.item(0, 4).text()}')
                 ylabel_on = (f'{self.u.tableWidget.item(0, 2).text()}')
                 ylabel_off = (f'{self.u.tableWidget.item(0, 3).text()}')
+                elabel_on = (f'{self.u.tableWidget.item(0, 5).text()}')
+                elabel_off = (f'{self.u.tableWidget.item(0, 6).text()}')
                 GraphXLabel = 'Energy (eV)' * self.u.rb_seng.isChecked() + 'PPODL (ps)' * self.u.rb_sdelay.isChecked()
                 GraphYLabel = self.u.rb_diff.isChecked() * 'diff' + \
                               self.u.rb_on.isChecked() * 'XAS' + \
@@ -142,11 +146,16 @@ class Ui(qt.QMainWindow):
                     try:
                         df = pd.read_csv(f'{_datdir}/{_f}_{ext}.csv', delim_whitespace=True)
                         if self.u.rb_diff.isChecked():
-                            self.hist.addCurve(df[xlabel],(df[ylabel_on]-df[ylabel_off])*alpha,linewidth=1.5,symbol='.',legend=_f)
+                            self.hist.addCurve(df[xlabel],(df[ylabel_on]-df[ylabel_off])*alpha,\
+                                               yerror = np.sqrt((df[elabel_on]*alpha)**2 +(df[elabel_off]*alpha)**2), linewidth=1.5,symbol='.',legend=_f)
                         elif self.u.rb_on.isChecked():
-                            self.hist.addCurve(df[xlabel],df[ylabel_on]*alpha,linewidth=1.5,symbol='.',legend=_f)
+                            self.hist.addCurve(df[xlabel],df[ylabel_on]*alpha,
+                                               yerror=np.sqrt((df[elabel_on] * alpha)**2),
+                                               linewidth=1.5,symbol='.',legend=_f)
                         elif self.u.rb_off.isChecked():
-                            self.hist.addCurve(df[xlabel],df[ylabel_off]*alpha,linewidth=1.5,symbol='.',legend=_f)
+                            self.hist.addCurve(df[xlabel],df[ylabel_off]*alpha,
+                                               yerror=np.sqrt((df[elabel_off] * alpha) ** 2),
+                                               linewidth=1.5,symbol='.',legend=_f)
                     except Exception as e:
                         print (f"Error for '_f': str{e}")
                 self.hist.setGraphXLabel(GraphXLabel)
@@ -189,6 +198,7 @@ class Ui(qt.QMainWindow):
 
         def plot_single_run(rnum):
             if rnum:
+                ### FXE
                 if self.u.tabWidget.currentIndex() == 0:
                     ch = self.u.ch2A.isChecked() * '2_A' + self.u.ch2B.isChecked() * '2_B'
                     datdir = self.u.textBrowser.toPlainText()
@@ -198,11 +208,13 @@ class Ui(qt.QMainWindow):
                     ylabel_diff = (f'{self.u.tableWidget.item(0, 4).text()}:{ch}')
                     ylabel_on = (f'{self.u.tableWidget.item(0, 2).text()}:{ch}')
                     ylabel_off = (f'{self.u.tableWidget.item(0, 3).text()}:{ch}')
+                    elabel_on = (f'{self.u.tableWidget.item(0, 5).text()}:{ch}')
+                    elabel_off = (f'{self.u.tableWidget.item(0, 6).text()}:{ch}')
                     GraphXLabel = 'Energy (eV)' * self.u.radioButton.isChecked() + 'PPODL (ps)' * self.u.radioButton_2.isChecked()
                     # GraphYLabel = self.u.rb_diff.isChecked() * 'diff' + \
                     #               self.u.rb_on.isChecked() * 'XAS' + \
                     #               self.u.rb_off.isChecked() * 'XAS'
-
+                ### SACLA
                 else:
                     ch = self.u.rb_pd.isChecked() * '' + self.u.rb_mpccd.isChecked() * '_mpccd'
                     ext = self.u.rb_seng.isChecked() * 'escan' + self.u.rb_sdelay.isChecked() * 'mscan' + f'{ch}'
@@ -211,6 +223,8 @@ class Ui(qt.QMainWindow):
                     ylabel_diff = (f'{self.u.tableWidget.item(0, 4).text()}')
                     ylabel_on = (f'{self.u.tableWidget.item(0, 2).text()}')
                     ylabel_off = (f'{self.u.tableWidget.item(0, 3).text()}')
+                    elabel_on = (f'{self.u.tableWidget.item(0, 5).text()}')
+                    elabel_off = (f'{self.u.tableWidget.item(0, 6).text()}')
                     GraphXLabel = 'Energy (eV)' * self.u.rb_seng.isChecked() + 'PPODL (ps)' * self.u.rb_sdelay.isChecked()
                     # GraphYLabel = self.u.rb_diff.isChecked() * 'diff' + \
                     #               self.u.rb_on.isChecked() * 'XAS' + \
@@ -225,9 +239,9 @@ class Ui(qt.QMainWindow):
                 try:
                     df = pd.read_csv(_datdir+'/'+file,delim_whitespace=True)
 
-                    self.raw_plot.addCurve(df[xlabel], df[ylabel_on], color='red', linewidth=1.5,symbol='.', legend='On')
-                    self.raw_plot.addCurve(df[xlabel], df[ylabel_off], color='blue', linewidth=1.5,symbol='.', legend='Off')
-                    self.raw_plot.addCurve(df[xlabel], df[ylabel_on] - df[ylabel_off], yaxis='right',color='green', linewidth=1.5, symbol='.', legend='diff')
+                    self.raw_plot.addCurve(df[xlabel], df[ylabel_on], yerror=df[elabel_on], color='red', linewidth=1.5,symbol='.', legend='On')
+                    self.raw_plot.addCurve(df[xlabel], df[ylabel_off], yerror=df[elabel_off], color='blue', linewidth=1.5,symbol='.', legend='Off')
+                    self.raw_plot.addCurve(df[xlabel], df[ylabel_on] - df[ylabel_off], yerror=np.sqrt(df[elabel_on]**2+df[elabel_off]**2), yaxis='right',color='green', linewidth=1.5, symbol='.', legend='diff')
                     self.raw_plot.setGraphXLabel(GraphXLabel)
                     self.raw_plot.setGraphYLabel('XAS')
                     self.raw_plot.setGraphYLabel('$\Delta$XAS', axis='right')
@@ -255,7 +269,8 @@ class Ui(qt.QMainWindow):
                     ylabel_diff = (f'{self.u.tableWidget.item(0, 4).text()}:{ch}')
                     ylabel_on = (f'{self.u.tableWidget.item(0, 2).text()}:{ch}')
                     ylabel_off = (f'{self.u.tableWidget.item(0, 3).text()}:{ch}')
-                    GraphXLabel = 'Energy (eV)'*self.u.radioButton.isChecked() + 'PPODL (ps)'*self.u.radioButton_2.isChecked()
+                    elabel_on = (f'{self.u.tableWidget.item(0, 5).text()}:{ch}')
+                    elabel_off = (f'{self.u.tableWidget.item(0, 6).text()}:{ch}')
                     GraphYLabel = self.u.rb_diff.isChecked() * 'diff'+ \
                              self.u.rb_on.isChecked() * 'XAS'+ \
                              self.u.rb_off.isChecked() * 'XAS'
@@ -269,11 +284,13 @@ class Ui(qt.QMainWindow):
                     ylabel_on = (f'{self.u.tableWidget.item(0, 2).text()}')
                     ylabel_off = (f'{self.u.tableWidget.item(0, 3).text()}')
                     GraphXLabel = 'Energy (eV)' * self.u.rb_seng.isChecked() + 'PPODL (ps)' * self.u.rb_sdelay.isChecked()
+                    elabel_on = (f'{self.u.tableWidget.item(0, 5).text()}')
+                    elabel_off = (f'{self.u.tableWidget.item(0, 6).text()}')
                     GraphYLabel = self.u.rb_diff.isChecked() * 'diff' + \
                                   self.u.rb_on.isChecked() * 'XAS' + \
                                   self.u.rb_off.isChecked() * 'XAS'
 
-                xas_on, xas_off = [], []
+                xas_on, xas_off, err_on, err_off = [], [], [], []
                 df_model = pd.read_csv(_datdir + '/' + f'{rnum}_{ext}.csv', delim_whitespace=True)
 
                 try:
@@ -283,16 +300,27 @@ class Ui(qt.QMainWindow):
                     for _f in items:
                         _datdir = datdir if self.u.tabWidget.currentIndex() == 0 else f'{datdir}/{_f}'
                         df = pd.read_csv(f'{_datdir}/{_f}_{ext}.csv', delim_whitespace=True)
+                        ### Interpolation for xas
                         func = interp1d(df[xlabel].values, df[ylabel_on].values, bounds_error=False)
                         xas_on.append(func(x))
                         func = interp1d(df[xlabel].values, df[ylabel_off].values, bounds_error=False)
                         xas_off.append(func(x))
 
+                        ### Interpolation for error
+                        func = interp1d(df[xlabel].values, df[elabel_on].values**2, bounds_error=False)
+                        err_on.append(func(x))
+                        func = interp1d(df[xlabel].values, df[elabel_off].values ** 2, bounds_error=False)
+                        err_off.append(func(x))
+
                     xas_on = np.array(xas_on)
                     xas_off = np.array(xas_off)
-                    self.conv_plot.addCurve(x, np.nanmean(xas_on, axis=0), color='red', linewidth=1.5, symbol='.',legend='On')
-                    self.conv_plot.addCurve(x, np.nanmean(xas_off, axis=0), color='blue', linewidth=1.5, symbol='.',legend='Off')
-                    self.conv_plot.addCurve(x, np.nanmean(xas_on, axis=0) - np.nanmean(xas_off, axis=0), color='green',yaxis='right', linewidth=1.5, symbol='.', legend='diff')
+                    N, L = np.shape(xas_on)
+                    sq_err_on = np.array(err_on)/N
+                    sq_err_off = np.array(err_off)/N
+                    self.conv_plot.addCurve(x, np.nanmean(xas_on, axis=0), yerror=np.sqrt(np.nanmean(err_on,axis=0)), color='red', linewidth=1.5, symbol='.',legend='On')
+                    self.conv_plot.addCurve(x, np.nanmean(xas_off, axis=0), yerror=np.sqrt(np.nanmean(err_off,axis=0)), color='blue', linewidth=1.5, symbol='.',legend='Off')
+                    self.conv_plot.addCurve(x, np.nanmean(xas_on, axis=0) - np.nanmean(xas_off, axis=0), yerror=np.sqrt(np.nanmean(err_on,axis=0)+np.nanmean(err_off,axis=0)),
+                                                                            color='green',yaxis='right', linewidth=1.5, symbol='.', legend='diff')
 
                 except Exception as e:
                     msg("!! {str(e)}").exec_()
@@ -303,15 +331,18 @@ class Ui(qt.QMainWindow):
                 f = FO_dialog.getSaveFileName(self, "Set the output file name", self.u.textBrowser.toPlainText(), )
                 if f[0]:
                     try:
-                        x,On,_,_ = self.conv_plot.getCurve('On').getData()
-                        x, Off, _, _ = self.conv_plot.getCurve('Off').getData()
-                        x, diff, _, _ = self.conv_plot.getCurve('diff').getData()
+                        x,On,_,yerr_on = self.conv_plot.getCurve('On').getData()
+                        x, Off, _, yerr_off = self.conv_plot.getCurve('Off').getData()
+                        x, diff, _, yerr_diff = self.conv_plot.getCurve('diff').getData()
                         label = '#Energy/eV'*(self.u.radioButton.isChecked()) + '#Motor/pls'*(self.u.radioButton_2.isChecked())
                         pd.DataFrame({
                             label: x,
                             'On': On,
                             'Off': Off,
-                            'diff': diff
+                            'diff': diff,
+                            'err_on': yerr_on,
+                            'err_off': yerr_off,
+                            'err_diff': yerr_diff,
                         }).to_csv(f[0],index=False,sep=' ',float_format='%.6f')
                     except Exception as e:
                         msg(f"!! {str(e)}").exec_()

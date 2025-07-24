@@ -97,7 +97,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>800</height>
+            <height>750</height>
            </size>
           </property>
           <property name="frameShape">
@@ -128,45 +128,6 @@
               <enum>QFrame::Raised</enum>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_5">
-              <item>
-               <widget class="QFrame" name="frame_8">
-                <property name="frameShape">
-                 <enum>QFrame::Box</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Sunken</enum>
-                </property>
-                <layout class="QHBoxLayout" name="horizontalLayout_8">
-                 <item>
-                  <widget class="QLabel" name="label_2">
-                   <property name="text">
-                    <string>Runs:</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer_4">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>447</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item>
-                  <widget class="QPushButton" name="pushButton_6">
-                   <property name="text">
-                    <string>unselect all</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
               <item>
                <widget class="QTabWidget" name="tabWidget">
                 <property name="sizePolicy">
@@ -330,15 +291,15 @@
                 <property name="frameShadow">
                  <enum>QFrame::Raised</enum>
                 </property>
-                <layout class="QHBoxLayout" name="horizontalLayout_4">
-                 <item>
+                <layout class="QGridLayout" name="gridLayout_2">
+                 <item row="0" column="0">
                   <widget class="QLabel" name="label_3">
                    <property name="text">
                     <string>Data in the directory</string>
                    </property>
                   </widget>
                  </item>
-                 <item>
+                 <item row="0" column="1">
                   <spacer name="horizontalSpacer_2">
                    <property name="orientation">
                     <enum>Qt::Horizontal</enum>
@@ -351,7 +312,7 @@
                    </property>
                   </spacer>
                  </item>
-                 <item>
+                 <item row="0" column="2">
                   <widget class="QPushButton" name="pushButton_4">
                    <property name="text">
                     <string/>
@@ -365,6 +326,13 @@
                      <width>24</width>
                      <height>24</height>
                     </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QPushButton" name="pushButton_6">
+                   <property name="text">
+                    <string>unselect all</string>
                    </property>
                   </widget>
                  </item>
@@ -415,7 +383,7 @@
                  <number>1</number>
                 </property>
                 <property name="columnCount">
-                 <number>10</number>
+                 <number>12</number>
                 </property>
                 <row/>
                 <column>
@@ -441,6 +409,16 @@
                 <column>
                  <property name="text">
                   <string>diff</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>err_on</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>err_off</string>
                  </property>
                 </column>
                 <column/>
@@ -471,6 +449,16 @@
                 <item row="0" column="4">
                  <property name="text">
                   <string>diff</string>
+                 </property>
+                </item>
+                <item row="0" column="5">
+                 <property name="text">
+                  <string>err_on</string>
+                 </property>
+                </item>
+                <item row="0" column="6">
+                 <property name="text">
+                  <string>err_off</string>
                  </property>
                 </item>
                </widget>
