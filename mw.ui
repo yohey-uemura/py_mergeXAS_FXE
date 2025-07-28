@@ -383,7 +383,7 @@
                  <number>1</number>
                 </property>
                 <property name="columnCount">
-                 <number>12</number>
+                 <number>15</number>
                 </property>
                 <row/>
                 <column>
@@ -419,6 +419,21 @@
                 <column>
                  <property name="text">
                   <string>err_off</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>I0_1</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>I0_2</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>If</string>
                  </property>
                 </column>
                 <column/>
@@ -459,6 +474,21 @@
                 <item row="0" column="6">
                  <property name="text">
                   <string>err_off</string>
+                 </property>
+                </item>
+                <item row="0" column="7">
+                 <property name="text">
+                  <string>__no_entry__</string>
+                 </property>
+                </item>
+                <item row="0" column="8">
+                 <property name="text">
+                  <string>__no_entry__</string>
+                 </property>
+                </item>
+                <item row="0" column="9">
+                 <property name="text">
+                  <string>__no_entry__</string>
                  </property>
                 </item>
                </widget>
@@ -747,7 +777,7 @@
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
-                  <height>250</height>
+                  <height>140</height>
                  </size>
                 </property>
                 <property name="selectionMode">
@@ -757,23 +787,42 @@
               </item>
               <item>
                <widget class="QFrame" name="frame_4">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>60</height>
+                 </size>
+                </property>
                 <property name="frameShape">
                  <enum>QFrame::Panel</enum>
                 </property>
                 <property name="frameShadow">
                  <enum>QFrame::Sunken</enum>
                 </property>
-                <layout class="QHBoxLayout" name="horizontalLayout_9">
-                 <item>
-                  <widget class="QComboBox" name="comboBox_2"/>
+                <layout class="QGridLayout" name="gridLayout_3">
+                 <item row="0" column="0">
+                  <widget class="QComboBox" name="comboBox_2">
+                   <property name="minimumSize">
+                    <size>
+                     <width>250</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </widget>
                  </item>
-                 <item>
+                 <item row="0" column="1">
                   <widget class="QPushButton" name="pushButton_3">
                    <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>100</width>
+                     <height>0</height>
+                    </size>
                    </property>
                    <property name="text">
                     <string>Merge</string>
@@ -783,6 +832,89 @@
                      <width>60</width>
                      <height>60</height>
                     </size>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="frame_8">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_4">
+                 <item row="1" column="1">
+                  <widget class="QDoubleSpinBox" name="dsb_ll">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="decimals">
+                    <number>4</number>
+                   </property>
+                   <property name="maximum">
+                    <double>1.000000000000000</double>
+                   </property>
+                   <property name="value">
+                    <double>0.001000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QCheckBox" name="checkBox">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>50</width>
+                     <height>10</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>use raw</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QDoubleSpinBox" name="dsb_ul">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="decimals">
+                    <number>4</number>
+                   </property>
+                   <property name="maximum">
+                    <double>1.000000000000000</double>
+                   </property>
+                   <property name="value">
+                    <double>0.999000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QLabel" name="label">
+                   <property name="text">
+                    <string>lower</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QLabel" name="label_2">
+                   <property name="text">
+                    <string>upper</string>
                    </property>
                   </widget>
                  </item>

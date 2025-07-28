@@ -2,6 +2,7 @@
 import sys, os, string, io, glob, re, yaml, math, time, shutil, natsort
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 
 import silx
 from silx.gui import qt
@@ -51,10 +52,15 @@ class Ui(qt.QMainWindow):
             if self.u.tabWidget.currentIndex() == 0:
                 self.u.tableWidget.item(0, 0).setText('#Energy [eV]')
                 self.u.tableWidget.item(0, 1).setText('#PPODL [ps]')
-                print (self.u.tableWidget.itemAt(0, 0).text())
+                self.u.tableWidget.item(0, 7).setText('__no_entry__')
+                self.u.tableWidget.item(0, 8).setText('__no_entry__')
+                self.u.tableWidget.item(0, 9).setText('__no_entry__')
             elif self.u.tabWidget.currentIndex() == 1:
                 self.u.tableWidget.item(0, 0).setText('Energy')
                 self.u.tableWidget.item(0, 1).setText('#motor')
+                self.u.tableWidget.item(0, 7).setText('pd_8')
+                self.u.tableWidget.item(0, 8).setText('pd_9')
+                self.u.tableWidget.item(0, 9).setText('mpccd')
 
         self.u.tabWidget.currentChanged.connect(changeHeaders)
 
@@ -252,9 +258,121 @@ class Ui(qt.QMainWindow):
 
                 plot_multi_runs()
 
+        def setEnabled_checkbox(idx):
+            if idx == 1:
+                self.u.frame_8.setEnabled(True)
+            else:
+                self.u.checkBox.setChecked(False)
+                self.u.frame_8.setEnabled(False)
 
+        self.u.tabWidget.currentChanged[int].connect(setEnabled_checkbox)
 
-        def merge():
+        def CC2Eng(M):
+            theta = M * 4 / 10 ** 6
+            return np.round(12.3984 / (6.270832 * np.sin(theta * np.pi / 180.0)) * 1000, 2)
+
+        def merge_raw_data():
+            try:
+                datdir = self.u.textBrowser.toPlainText()
+                items = [x.text() for x in self.u.listWidget_2.selectedItems()]
+                df_on = pd.DataFrame()
+                df_off = pd.DataFrame()
+                for k, d in enumerate(items):
+                    if k == 0:
+                        df_on = pd.read_csv(f'{datdir}/{d}/laseron_{d}.csv', index_col='#Tag')
+                        df_off = pd.read_csv(f'{datdir}/{d}/laseroff_{d}.csv', index_col='#Tag')
+                    else:
+                        df_on = pd.concat([df_on, pd.read_csv(f'{datdir}/{d}/laseron_{d}.csv', index_col='#Tag')])
+                        df_off = pd.concat([df_off, pd.read_csv(f'{datdir}/{d}/laseroff_{d}.csv', index_col='#Tag')])
+
+                labels = ['mono']
+                for key in df_on.keys():
+                    if 'motor' in key:
+                        labels.append(key)
+
+                for l in labels:
+                    df_on[l] = df_on[l].str.replace('pulse', '').astype(int)
+                    df_off[l] = df_off[l].str.replace('pulse', '').astype(int)
+
+                df_on['Energy'] = CC2Eng(df_on['mono'])
+                df_off['Energy'] = CC2Eng(df_off['mono'])
+
+                labels = []
+                for key in df_on.keys():
+                    if 'pd' in key:
+                        labels.append(key)
+
+                for l in labels:
+                    df_on[l] = df_on[l].str.replace('V', '')
+                    df_on[l] = df_on[l].str.replace('not-converged', 'NaN')
+                    df_on[l] = df_on[l].str.replace('saturated', 'NaN')
+                    df_on[l] = df_on[l].astype(float)
+                    df_off[l] = df_off[l].str.replace('V', '')
+                    df_off[l] = df_off[l].str.replace('not-converged', 'NaN')
+                    df_off[l] = df_off[l].str.replace('saturated', 'NaN')
+                    df_off[l] = df_off[l].astype(float)
+
+                xlabel = self.u.tableWidget.item(0, 0).text() * (self.u.rb_seng.isChecked()) + \
+                         self.u.tableWidget.item(0, 1).text() * (self.u.rb_sdelay.isChecked())
+                if self.u.rb_seng.isChecked():
+                    setpoints = np.round(np.unique(df_on['Energy'].values), 2)
+                elif self.u.rb_sdelay.isChecked():
+                    setpoints = np.unique(df_on['motor_1'].values)
+
+                print (setpoints)
+                xas_on, xas_off, err_on, err_off, I0_on, I0_off, If_on, If_off = ([] for i in range(8))
+                Eng = []
+                shots_on, shots_off = [], []
+                delta = 0.1
+                thr = self.u.dsb_ll.value(), self.u.dsb_ul.value()
+
+                l_I0_1 = self.u.tableWidget.item(0, 7).text()
+                l_I0_2 = self.u.tableWidget.item(0, 8).text()
+                l_If = self.u.tableWidget.item(0, 9).text()
+
+                for e in tqdm(setpoints):
+                    Eng.append(e)
+                    for j, df in enumerate([df_on, df_off]):
+                        subset = df[np.abs(df[xlabel] - e) < delta]
+                        tags = subset.index.values
+                        TF = (~pd.isna(subset[l_I0_1][tags])) & (~pd.isna(subset[l_I0_2][tags]))
+                        TF2 = (subset[l_I0_1][tags] > thr[0]) * (subset[l_I0_2][tags] < thr[1]) * (
+                                    subset[l_I0_1][tags] > thr[0]) * (subset[l_I0_2][tags] < thr[1])
+                        I0_each = (subset[l_I0_1][tags][TF * TF2] + subset[l_I0_2][tags][TF * TF2]) / 2
+                        If_each = subset[l_If][tags][TF * TF2]
+
+                        N = (TF * TF2 * 1).sum()
+                        if j == 0:
+                            xas_on.append(If_each.sum() / I0_each.sum())
+                            err_on.append(np.std(If_each / I0_each) / np.sqrt(N))
+                            I0_on.append(I0_each.sum())
+                            If_on.append(If_each.sum())
+                            shots_on.append(N)
+                        elif j == 1:
+                            xas_off.append(If_each.sum() / I0_each.sum())
+                            err_off.append(np.std(If_each / I0_each) / np.sqrt(N))
+                            I0_off.append(I0_each.sum())
+                            If_off.append(If_each.sum())
+                            shots_off.append(N)
+
+                xas_on = np.array(xas_on)
+                xas_off = np.array(xas_off)
+
+                err_on = np.array(err_on)
+                err_off = np.array(err_off)
+
+                self.conv_plot.addCurve(setpoints, xas_on, yerror=err_on,
+                                        color='red', linewidth=1.5, symbol='.', legend='On')
+                self.conv_plot.addCurve(setpoints, xas_off, yerror=err_off,
+                                        color='blue', linewidth=1.5, symbol='.', legend='Off')
+                self.conv_plot.addCurve(setpoints, xas_on - xas_off,
+                                        yerror=np.sqrt(err_on**2 + err_off**2),
+                                        color='green', yaxis='right', linewidth=1.5, symbol='.', legend='diff')
+
+            except Exception as e:
+                msg(f"!! {str(e)}").exec_()
+
+        def merge_spectra():
             if self.u.comboBox_2.currentText():
                 rnum = self.u.comboBox_2.currentText()
                 ch = self.u.ch2A.isChecked() * '2_A' + self.u.ch2B.isChecked() * '2_B'
@@ -323,7 +441,13 @@ class Ui(qt.QMainWindow):
                                                                             color='green',yaxis='right', linewidth=1.5, symbol='.', legend='diff')
 
                 except Exception as e:
-                    msg("!! {str(e)}").exec_()
+                    msg(f"!! {str(e)}").exec_()
+
+        def merge():
+            if self.u.checkBox.isChecked():
+                merge_raw_data()
+            else:
+                merge_spectra()
 
         def savedata():
             if os.path.isdir(self.u.textBrowser.toPlainText()):
