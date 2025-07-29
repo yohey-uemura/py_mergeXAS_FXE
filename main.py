@@ -254,7 +254,9 @@ class Ui(qt.QMainWindow):
                     self.raw_plot.setGraphTitle(f'{rnum}')
 
                 except Exception as e:
-                    msg(f"!! {str(e)}").exec_()
+                    exc_type, exc_obj, exc_tb = sys.exc_info()
+                    ln = exc_tb.tb_lineno
+                    msg(f"!! L. {ln}: {str(e)}").exec_()
 
                 plot_multi_runs()
 
@@ -314,9 +316,12 @@ class Ui(qt.QMainWindow):
 
                 xlabel = self.u.tableWidget.item(0, 0).text() * (self.u.rb_seng.isChecked()) + \
                          self.u.tableWidget.item(0, 1).text() * (self.u.rb_sdelay.isChecked())
+                if self.u.checkBox.isChecked():
+                    xlabel = 'motor_1'
                 if self.u.rb_seng.isChecked():
                     setpoints = np.round(np.unique(df_on['Energy'].values), 2)
                 elif self.u.rb_sdelay.isChecked():
+                    _label = 'motor_1' if self.u.checkBox.isChecked() else self.u.tableWidget.item(0,1).text()
                     setpoints = np.unique(df_on['motor_1'].values)
 
                 print (setpoints)
@@ -370,7 +375,9 @@ class Ui(qt.QMainWindow):
                                         color='green', yaxis='right', linewidth=1.5, symbol='.', legend='diff')
 
             except Exception as e:
-                msg(f"!! {str(e)}").exec_()
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                ln = exc_tb.tb_lineno
+                msg(f"!! L. {ln}: {str(e)}").exec_()
 
         def merge_spectra():
             if self.u.comboBox_2.currentText():
@@ -441,7 +448,10 @@ class Ui(qt.QMainWindow):
                                                                             color='green',yaxis='right', linewidth=1.5, symbol='.', legend='diff')
 
                 except Exception as e:
-                    msg(f"!! {str(e)}").exec_()
+                    exc_type, exc_obj, exc_tb = sys.exc_info()
+                    ln = exc_tb.tb_lineno
+                    msg(f"!! L. {ln}: {str(e)}").exec_()
+                    
 
         def merge():
             if self.u.checkBox.isChecked():
@@ -451,8 +461,13 @@ class Ui(qt.QMainWindow):
 
         def savedata():
             if os.path.isdir(self.u.textBrowser.toPlainText()):
+                txt = ''
+                for f in [x.text() for x in self.u.listWidget_2.selectedItems()]:
+                    txt += f'{f}_'
                 FO_dialog = qt.QFileDialog(self)
-                f = FO_dialog.getSaveFileName(self, "Set the output file name", self.u.textBrowser.toPlainText(), )
+                f = FO_dialog.getSaveFileName(self,
+                                              "Set the output file name",
+                                              self.u.textBrowser.toPlainText()+'/'+f'avg_{txt[:-1]}.csv', )
                 if f[0]:
                     try:
                         x,On,_,yerr_on = self.conv_plot.getCurve('On').getData()
@@ -469,7 +484,9 @@ class Ui(qt.QMainWindow):
                             'err_diff': yerr_diff,
                         }).to_csv(f[0],index=False,sep=' ',float_format='%.6f')
                     except Exception as e:
-                        msg(f"!! {str(e)}").exec_()
+                        exc_type, exc_obj, exc_tb = sys.exc_info()
+                        ln = exc_tb.tb_lineno
+                        msg(f"!! L. {ln}: {str(e)}").exec_()
 
         self.u.pushButton.clicked.connect(selectDir)
         self.u.pushButton_2.clicked.connect(load_data)
