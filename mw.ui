@@ -6,504 +6,744 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1710</width>
-    <height>1040</height>
+    <width>1600</width>
+    <height>960</height>
    </rect>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>0</width>
-    <height>150</height>
-   </size>
-  </property>
   <property name="windowTitle">
-   <string>Merge XAS data</string>
+   <string>Merge XAS Data</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QSplitter" name="splitter">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>1200</width>
-        <height>750</height>
-       </size>
-      </property>
+   <layout class="QVBoxLayout" name="layout_central">
+    <item>
+     <widget class="QSplitter" name="splitter_main">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QFrame" name="frame_3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>750</height>
-        </size>
-       </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
+      
+      <!-- ================= LEFT PANEL: DATA SELECTION ================= -->
+      <widget class="QFrame" name="panel_left">
        <property name="frameShape">
-        <enum>QFrame::Box</enum>
+        <enum>QFrame::StyledPanel</enum>
        </property>
        <property name="frameShadow">
         <enum>QFrame::Sunken</enum>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <layout class="QVBoxLayout" name="layout_left">
+        
+        <!-- Directory Selector -->
         <item>
-         <widget class="QFrame" name="frame">
+         <layout class="QHBoxLayout" name="layout_dir_bar">
+          <item>
+           <widget class="QPushButton" name="btn_open_dir">
+            <property name="text">
+             <string>Open</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="edit_dir_path">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="placeholderText">
+             <string>Select data directory...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+
+        <!-- Facility Tabs (FXE / SACLA) -->
+        <item>
+         <widget class="QTabWidget" name="tab_facility">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>80</height>
-           </size>
+          <property name="currentIndex">
+           <number>0</number>
           </property>
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QPushButton" name="pushButton">
-             <property name="text">
-              <string>Open</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTextBrowser" name="textBrowser"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QFrame" name="frame_2">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>750</height>
-           </size>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <item>
-            <widget class="QFrame" name="frame_13">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>680</height>
-              </size>
-             </property>
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
-             </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_5">
-              <item>
-               <widget class="QTabWidget" name="tabWidget">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>120</height>
-                 </size>
-                </property>
-                <property name="currentIndex">
-                 <number>0</number>
-                </property>
-                <widget class="QWidget" name="fxe">
-                 <attribute name="title">
-                  <string>FXE</string>
-                 </attribute>
-                 <layout class="QHBoxLayout" name="horizontalLayout_11">
-                  <item>
-                   <widget class="QGroupBox" name="groupBox">
-                    <property name="title">
-                     <string>Scan type</string>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_3">
-                     <item>
-                      <widget class="QRadioButton" name="radioButton">
-                       <property name="text">
-                        <string>Energy</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                       <attribute name="buttonGroup">
-                        <string notr="true">buttonGroup</string>
-                       </attribute>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="radioButton_2">
-                       <property name="text">
-                        <string>PPODL</string>
-                       </property>
-                       <attribute name="buttonGroup">
-                        <string notr="true">buttonGroup</string>
-                       </attribute>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QGroupBox" name="groupBox_2">
-                    <property name="enabled">
-                     <bool>true</bool>
-                    </property>
-                    <property name="title">
-                     <string>Detector</string>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_7">
-                     <item>
-                      <widget class="QRadioButton" name="ch2A">
-                       <property name="text">
-                        <string>2_A</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="ch2B">
-                       <property name="enabled">
-                        <bool>true</bool>
-                       </property>
-                       <property name="text">
-                        <string>2_B</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-                <widget class="QWidget" name="sacla">
-                 <attribute name="title">
-                  <string>SACLA</string>
-                 </attribute>
-                 <layout class="QHBoxLayout" name="horizontalLayout_14">
-                  <item>
-                   <widget class="QGroupBox" name="groupBox_5">
-                    <property name="title">
-                     <string>Scan type</string>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_12">
-                     <item>
-                      <widget class="QRadioButton" name="rb_seng">
-                       <property name="text">
-                        <string>Energy</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="rb_sdelay">
-                       <property name="text">
-                        <string>Delay</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QGroupBox" name="groupBox_6">
-                    <property name="enabled">
-                     <bool>true</bool>
-                    </property>
-                    <property name="title">
-                     <string>Detector</string>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_13">
-                     <item>
-                      <widget class="QRadioButton" name="rb_pd">
-                       <property name="text">
-                        <string>PD</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="rb_mpccd">
-                       <property name="enabled">
-                        <bool>true</bool>
-                       </property>
-                       <property name="text">
-                        <string>mpccd</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </widget>
-              </item>
-              <item>
-               <widget class="QFrame" name="frame_9">
-                <property name="frameShape">
-                 <enum>QFrame::NoFrame</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QGridLayout" name="gridLayout_2">
-                 <item row="0" column="0">
-                  <widget class="QLabel" name="label_3">
-                   <property name="text">
-                    <string>Data in the directory</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <spacer name="horizontalSpacer_2">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>300</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                 <item row="0" column="2">
-                  <widget class="QPushButton" name="pushButton_4">
-                   <property name="text">
-                    <string/>
-                   </property>
-                   <property name="icon">
-                    <iconset>
-                     <normaloff>reload.png</normaloff>reload.png</iconset>
-                   </property>
-                   <property name="iconSize">
-                    <size>
-                     <width>24</width>
-                     <height>24</height>
-                    </size>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QPushButton" name="pushButton_6">
-                   <property name="text">
-                    <string>unselect all</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item>
-               <widget class="QListWidget" name="listWidget">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>400</height>
-                 </size>
-                </property>
-                <property name="selectionMode">
-                 <enum>QAbstractItemView::MultiSelection</enum>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_4">
-                <property name="text">
-                 <string>Headers</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QTableWidget" name="tableWidget">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>55</height>
-                 </size>
-                </property>
-                <property name="rowCount">
-                 <number>1</number>
-                </property>
-                <property name="columnCount">
-                 <number>15</number>
-                </property>
-                <row/>
-                <column>
+          
+          <!-- FXE Tab -->
+          <widget class="QWidget" name="tab_fxe">
+           <attribute name="title">
+            <string>FXE</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="layout_tab_fxe">
+            <item>
+             <widget class="QGroupBox" name="group_fxe_scan_type">
+              <property name="title">
+               <string>Scan type</string>
+              </property>
+              <layout class="QHBoxLayout" name="layout_fxe_scan">
+               <item>
+                <widget class="QRadioButton" name="rb_fxe_energy">
                  <property name="text">
                   <string>Energy</string>
                  </property>
-                </column>
-                <column>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <attribute name="buttonGroup">
+                  <string notr="true">bg_fxe_scan_type</string>
+                 </attribute>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="rb_fxe_ppodl">
+                 <property name="text">
+                  <string>PPODL</string>
+                 </property>
+                 <attribute name="buttonGroup">
+                  <string notr="true">bg_fxe_scan_type</string>
+                 </attribute>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="group_fxe_detector">
+              <property name="title">
+               <string>Detector</string>
+              </property>
+              <layout class="QHBoxLayout" name="layout_fxe_det">
+               <item>
+                <widget class="QRadioButton" name="rb_fxe_ch2a">
+                 <property name="text">
+                  <string>2_A</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <attribute name="buttonGroup">
+                  <string notr="true">bg_fxe_detector</string>
+                 </attribute>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="rb_fxe_ch2b">
+                 <property name="text">
+                  <string>2_B</string>
+                 </property>
+                 <attribute name="buttonGroup">
+                  <string notr="true">bg_fxe_detector</string>
+                 </attribute>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+
+          <!-- SACLA Tab -->
+          <widget class="QWidget" name="tab_sacla">
+           <attribute name="title">
+            <string>SACLA</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="layout_tab_sacla">
+            <item>
+             <widget class="QGroupBox" name="group_sacla_scan_type">
+              <property name="title">
+               <string>Scan type</string>
+              </property>
+              <layout class="QHBoxLayout" name="layout_sacla_scan">
+               <item>
+                <widget class="QRadioButton" name="rb_sacla_energy">
+                 <property name="text">
+                  <string>Energy</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <attribute name="buttonGroup">
+                  <string notr="true">bg_sacla_scan_type</string>
+                 </attribute>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="rb_sacla_delay">
                  <property name="text">
                   <string>Delay</string>
                  </property>
-                </column>
-                <column>
+                 <attribute name="buttonGroup">
+                  <string notr="true">bg_sacla_scan_type</string>
+                 </attribute>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="group_sacla_detector">
+              <property name="title">
+               <string>Detector</string>
+              </property>
+              <layout class="QHBoxLayout" name="layout_sacla_det">
+               <item>
+                <widget class="QRadioButton" name="rb_sacla_pd">
                  <property name="text">
-                  <string>xas_on</string>
+                  <string>PD</string>
                  </property>
-                </column>
-                <column>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                 <attribute name="buttonGroup">
+                  <string notr="true">bg_sacla_detector</string>
+                 </attribute>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="rb_sacla_mpccd">
                  <property name="text">
-                  <string>xas_off</string>
+                  <string>mpccd</string>
                  </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>diff</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>err_on</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>err_off</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>I0_1</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>I0_2</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>If</string>
-                 </property>
-                </column>
-                <column/>
-                <column/>
-                <column/>
-                <column/>
-                <column/>
-                <item row="0" column="0">
-                 <property name="text">
-                  <string>#Energy [eV]</string>
-                 </property>
-                </item>
-                <item row="0" column="1">
-                 <property name="text">
-                  <string>#PPODL [ps]</string>
-                 </property>
-                </item>
-                <item row="0" column="2">
-                 <property name="text">
-                  <string>xas_on</string>
-                 </property>
-                </item>
-                <item row="0" column="3">
-                 <property name="text">
-                  <string>xas_off</string>
-                 </property>
-                </item>
-                <item row="0" column="4">
-                 <property name="text">
-                  <string>diff</string>
-                 </property>
-                </item>
-                <item row="0" column="5">
-                 <property name="text">
-                  <string>err_on</string>
-                 </property>
-                </item>
-                <item row="0" column="6">
-                 <property name="text">
-                  <string>err_off</string>
-                 </property>
-                </item>
-                <item row="0" column="7">
-                 <property name="text">
-                  <string>__no_entry__</string>
-                 </property>
-                </item>
-                <item row="0" column="8">
-                 <property name="text">
-                  <string>__no_entry__</string>
-                 </property>
-                </item>
-                <item row="0" column="9">
-                 <property name="text">
-                  <string>__no_entry__</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
+                 <attribute name="buttonGroup">
+                  <string notr="true">bg_sacla_detector</string>
+                 </attribute>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+
+        <!-- Directory File Controls -->
+        <item>
+         <layout class="QHBoxLayout" name="layout_dir_controls">
+          <item>
+           <widget class="QLabel" name="lbl_dir_data">
+            <property name="text">
+             <string>Data in the directory</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="spacer_dir_controls">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_unselect_all">
+            <property name="text">
+             <string>Unselect all</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_reload_dir">
+            <property name="toolTip">
+             <string>Reload directory</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>reload.png</normaloff>reload.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+
+        <!-- Run List -->
+        <item>
+         <widget class="QListWidget" name="list_dir_runs">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>3</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::MultiSelection</enum>
+          </property>
+         </widget>
+        </item>
+
+        <!-- Headers Mapping Table -->
+        <item>
+         <widget class="QLabel" name="lbl_headers">
+          <property name="text">
+           <string>Headers</string>
+          </property>
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="widget_4" native="true">
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <widget class="QTableWidget" name="table_headers">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>75</height>
+           </size>
+          </property>
+          <property name="rowCount">
+           <number>1</number>
+          </property>
+          <property name="columnCount">
+           <number>15</number>
+          </property>
+          <row/>
+          <column>
+           <property name="text">
+            <string>Energy</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Delay</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>xas_on</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>xas_off</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>diff</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>err_on</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>err_off</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>I0_1</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>I0_2</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>If</string>
+           </property>
+          </column>
+          <column/>
+          <column/>
+          <column/>
+          <column/>
+          <column/>
+          <item row="0" column="0">
+           <property name="text">
+            <string>#Energy [eV]</string>
+           </property>
+          </item>
+          <item row="0" column="1">
+           <property name="text">
+            <string>#PPODL [ps]</string>
+           </property>
+          </item>
+          <item row="0" column="2">
+           <property name="text">
+            <string>xas_on</string>
+           </property>
+          </item>
+          <item row="0" column="3">
+           <property name="text">
+            <string>xas_off</string>
+           </property>
+          </item>
+          <item row="0" column="4">
+           <property name="text">
+            <string>diff</string>
+           </property>
+          </item>
+          <item row="0" column="5">
+           <property name="text">
+            <string>err_on</string>
+           </property>
+          </item>
+          <item row="0" column="6">
+           <property name="text">
+            <string>err_off</string>
+           </property>
+          </item>
+          <item row="0" column="7">
+           <property name="text">
+            <string>__no_entry__</string>
+           </property>
+          </item>
+          <item row="0" column="8">
+           <property name="text">
+            <string>__no_entry__</string>
+           </property>
+          </item>
+          <item row="0" column="9">
+           <property name="text">
+            <string>__no_entry__</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+
+        <!-- Load Action -->
+        <item>
+         <layout class="QHBoxLayout" name="layout_load_bar">
+          <item>
+           <spacer name="spacer_load_bar">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_load_runs">
+            <property name="text">
+             <string>Load runs</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+
+      <!-- ================= RIGHT PANEL: PLOTTING & MERGING ================= -->
+      <widget class="QSplitter" name="splitter_right">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="childrenCollapsible">
+        <bool>false</bool>
+       </property>
+
+       <!-- MIDDLE COLUMN: RAW DATA VIEW -->
+       <widget class="QFrame" name="panel_raw_data">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <layout class="QVBoxLayout" name="layout_raw_data">
+         <item>
+          <widget class="QGroupBox" name="group_raw_mode">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="title">
+            <string>Raw data</string>
+           </property>
+           <layout class="QHBoxLayout" name="layout_raw_mode">
+            <item>
+             <widget class="QRadioButton" name="rb_raw_diff">
+              <property name="text">
+               <string>diff</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">bg_raw_mode</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="rb_raw_on">
+              <property name="text">
+               <string>On</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">bg_raw_mode</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="rb_raw_off">
+              <property name="text">
+               <string>Off</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">bg_raw_mode</string>
+              </attribute>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+
+         <!-- Vertical Splitter for Top/Bottom Plots -->
+         <item>
+          <widget class="QSplitter" name="splitter_raw_plots">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="childrenCollapsible">
+            <bool>false</bool>
+           </property>
+           
+           <!-- Upper Plot + Scale Table -->
+           <widget class="QWidget" name="container_raw_top" native="true">
+            <layout class="QHBoxLayout" name="layout_raw_top">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QWidget" name="plot_raw_upper" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>3</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTableWidget" name="table_scales">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                 <horstretch>1</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>180</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="rowCount">
+                <number>10</number>
+               </property>
+               <property name="columnCount">
+                <number>2</number>
+               </property>
+               <row/><row/><row/><row/><row/><row/><row/><row/><row/><row/>
+               <column>
+                <property name="text">
+                 <string>scale</string>
+                </property>
+               </column>
+               <column/>
+               <item row="0" column="0"><property name="text"><string>1</string></property></item>
+               <item row="1" column="0"><property name="text"><string>1</string></property></item>
+               <item row="2" column="0"><property name="text"><string>1</string></property></item>
+               <item row="3" column="0"><property name="text"><string>1</string></property></item>
+               <item row="4" column="0"><property name="text"><string>1</string></property></item>
+               <item row="5" column="0"><property name="text"><string>1</string></property></item>
+               <item row="6" column="0"><property name="text"><string>1</string></property></item>
+               <item row="7" column="0"><property name="text"><string>1</string></property></item>
+               <item row="8" column="0"><property name="text"><string>1</string></property></item>
+               <item row="9" column="0"><property name="text"><string>1</string></property></item>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+
+           <!-- Lower Plot -->
+           <widget class="QWidget" name="plot_raw_lower" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </widget>
+         </item>
+
+         <item>
+          <widget class="QComboBox" name="combo_raw_channel"/>
+         </item>
+        </layout>
+       </widget>
+
+       <!-- FAR RIGHT COLUMN: SELECTED & MERGED DATA -->
+       <widget class="QFrame" name="panel_merged_data">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <layout class="QVBoxLayout" name="layout_merged_data">
+         <item>
+          <widget class="QGroupBox" name="group_selected_data">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>2</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="title">
+            <string>Selected data</string>
+           </property>
+           <layout class="QVBoxLayout" name="layout_selected_data">
+            <item>
+             <widget class="QListWidget" name="list_selected_runs">
+              <property name="selectionMode">
+               <enum>QAbstractItemView::MultiSelection</enum>
+              </property>
+             </widget>
+            </item>
+            
+            <!-- Merge Method & Button -->
+            <item>
+             <layout class="QHBoxLayout" name="layout_merge_controls">
+              <item>
+               <widget class="QComboBox" name="combo_merge_method">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_merge">
+                <property name="text">
+                 <string>Merge</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+
+            <!-- Threshold Controls -->
+            <item>
+             <layout class="QGridLayout" name="layout_thresholds">
+              <item row="0" column="1">
+               <widget class="QLabel" name="lbl_lower_limit">
+                <property name="text">
+                 <string>lower</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QLabel" name="lbl_upper_limit">
+                <property name="text">
+                 <string>upper</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QCheckBox" name="chk_use_raw">
+                <property name="text">
+                 <string>use raw</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QDoubleSpinBox" name="spin_lower_limit">
+                <property name="decimals">
+                 <number>4</number>
+                </property>
+                <property name="maximum">
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.001000000000000</double>
+                </property>
+                <property name="value">
+                 <double>0.001000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QDoubleSpinBox" name="spin_upper_limit">
+                <property name="decimals">
+                 <number>4</number>
+                </property>
+                <property name="maximum">
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.001000000000000</double>
+                </property>
+                <property name="value">
+                 <double>0.999000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+
+         <!-- Merged Data Plot -->
+         <item>
+          <widget class="QWidget" name="plot_merged" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>3</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+
+         <!-- Save Bar -->
+         <item>
+          <layout class="QHBoxLayout" name="layout_save_bar">
            <item>
-            <spacer name="horizontalSpacer">
+            <spacer name="spacer_save_bar">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -516,466 +756,16 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
+            <widget class="QPushButton" name="btn_save">
              <property name="text">
-              <string>Load runs</string>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>60</width>
-               <height>60</height>
-              </size>
+              <string>Save</string>
              </property>
             </widget>
            </item>
           </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QFrame" name="frame_6">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>1200</width>
-         <height>750</height>
-        </size>
-       </property>
-       <property name="frameShape">
-        <enum>QFrame::Box</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Sunken</enum>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item>
-         <widget class="QFrame" name="frame_7">
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Sunken</enum>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_3">
-           <item>
-            <widget class="QGroupBox" name="groupBox_3">
-             <property name="title">
-              <string>Raw data</string>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_10">
-              <item>
-               <widget class="QRadioButton" name="rb_diff">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>diff</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="rb_on">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>On</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="rb_off">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>Off</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSplitter" name="splitter_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <widget class="QFrame" name="frame_5">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>350</height>
-               </size>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Raised</enum>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_15">
-               <item>
-                <widget class="QWidget" name="widget_3" native="true">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>500</width>
-                   <height>200</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QTableWidget" name="tableWidget_2">
-                 <property name="rowCount">
-                  <number>10</number>
-                 </property>
-                 <property name="columnCount">
-                  <number>2</number>
-                 </property>
-                 <row/>
-                 <row/>
-                 <row/>
-                 <row/>
-                 <row/>
-                 <row/>
-                 <row/>
-                 <row/>
-                 <row/>
-                 <row/>
-                 <column>
-                  <property name="text">
-                   <string>scale</string>
-                  </property>
-                 </column>
-                 <column/>
-                 <item row="0" column="0">
-                  <property name="text">
-                   <string>1</string>
-                  </property>
-                 </item>
-                 <item row="1" column="0">
-                  <property name="text">
-                   <string>1</string>
-                  </property>
-                 </item>
-                 <item row="2" column="0">
-                  <property name="text">
-                   <string>1</string>
-                  </property>
-                 </item>
-                 <item row="3" column="0">
-                  <property name="text">
-                   <string>1</string>
-                  </property>
-                 </item>
-                 <item row="4" column="0">
-                  <property name="text">
-                   <string>1</string>
-                  </property>
-                 </item>
-                 <item row="5" column="0">
-                  <property name="text">
-                   <string>1</string>
-                  </property>
-                 </item>
-                 <item row="6" column="0">
-                  <property name="text">
-                   <string>1</string>
-                  </property>
-                 </item>
-                 <item row="7" column="0">
-                  <property name="text">
-                   <string>1</string>
-                  </property>
-                 </item>
-                 <item row="8" column="0">
-                  <property name="text">
-                   <string>1</string>
-                  </property>
-                 </item>
-                 <item row="9" column="0">
-                  <property name="text">
-                   <string>1</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="widget" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>500</width>
-                <height>400</height>
-               </size>
-              </property>
-             </widget>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="comboBox"/>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QFrame" name="frame_10">
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Sunken</enum>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_4">
-           <item>
-            <widget class="QGroupBox" name="groupBox_4">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>350</height>
-              </size>
-             </property>
-             <property name="title">
-              <string>Selected data</string>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_7">
-              <item>
-               <widget class="QListWidget" name="listWidget_2">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>140</height>
-                 </size>
-                </property>
-                <property name="selectionMode">
-                 <enum>QAbstractItemView::MultiSelection</enum>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QFrame" name="frame_4">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>60</height>
-                 </size>
-                </property>
-                <property name="frameShape">
-                 <enum>QFrame::Panel</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Sunken</enum>
-                </property>
-                <layout class="QGridLayout" name="gridLayout_3">
-                 <item row="0" column="0">
-                  <widget class="QComboBox" name="comboBox_2">
-                   <property name="minimumSize">
-                    <size>
-                     <width>250</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="QPushButton" name="pushButton_3">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>100</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="text">
-                    <string>Merge</string>
-                   </property>
-                   <property name="iconSize">
-                    <size>
-                     <width>60</width>
-                     <height>60</height>
-                    </size>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-              <item>
-               <widget class="QFrame" name="frame_8">
-                <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Raised</enum>
-                </property>
-                <layout class="QGridLayout" name="gridLayout_4">
-                 <item row="1" column="1">
-                  <widget class="QDoubleSpinBox" name="dsb_ll">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="decimals">
-                    <number>4</number>
-                   </property>
-                   <property name="maximum">
-                    <double>1.000000000000000</double>
-                   </property>
-                   <property name="value">
-                    <double>0.001000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QCheckBox" name="checkBox">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>50</width>
-                     <height>10</height>
-                    </size>
-                   </property>
-                   <property name="text">
-                    <string>use raw</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="2">
-                  <widget class="QDoubleSpinBox" name="dsb_ul">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="decimals">
-                    <number>4</number>
-                   </property>
-                   <property name="maximum">
-                    <double>1.000000000000000</double>
-                   </property>
-                   <property name="value">
-                    <double>0.999000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="1">
-                  <widget class="QLabel" name="label">
-                   <property name="text">
-                    <string>lower</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="2">
-                  <widget class="QLabel" name="label_2">
-                   <property name="text">
-                    <string>upper</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QWidget" name="widget_2" native="true">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>500</width>
-               <height>450</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QFrame" name="frame_12">
-             <property name="frameShape">
-              <enum>QFrame::Panel</enum>
-             </property>
-             <property name="frameShadow">
-              <enum>QFrame::Sunken</enum>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
-              <item>
-               <spacer name="horizontalSpacer_3">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>368</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_5">
-                <property name="text">
-                 <string>Save</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -986,27 +776,45 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1710</width>
-     <height>38</height>
+     <width>1600</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <tabstops>
-  <tabstop>pushButton</tabstop>
-  <tabstop>textBrowser</tabstop>
-  <tabstop>pushButton_4</tabstop>
-  <tabstop>radioButton</tabstop>
-  <tabstop>radioButton_2</tabstop>
-  <tabstop>ch2A</tabstop>
-  <tabstop>ch2B</tabstop>
-  <tabstop>comboBox</tabstop>
-  <tabstop>pushButton_5</tabstop>
+  <tabstop>btn_open_dir</tabstop>
+  <tabstop>edit_dir_path</tabstop>
+  <tabstop>tab_facility</tabstop>
+  <tabstop>rb_fxe_energy</tabstop>
+  <tabstop>rb_fxe_ppodl</tabstop>
+  <tabstop>rb_fxe_ch2a</tabstop>
+  <tabstop>rb_fxe_ch2b</tabstop>
+  <tabstop>btn_unselect_all</tabstop>
+  <tabstop>btn_reload_dir</tabstop>
+  <tabstop>list_dir_runs</tabstop>
+  <tabstop>table_headers</tabstop>
+  <tabstop>btn_load_runs</tabstop>
+  <tabstop>rb_raw_diff</tabstop>
+  <tabstop>rb_raw_on</tabstop>
+  <tabstop>rb_raw_off</tabstop>
+  <tabstop>combo_raw_channel</tabstop>
+  <tabstop>list_selected_runs</tabstop>
+  <tabstop>combo_merge_method</tabstop>
+  <tabstop>btn_merge</tabstop>
+  <tabstop>chk_use_raw</tabstop>
+  <tabstop>spin_lower_limit</tabstop>
+  <tabstop>spin_upper_limit</tabstop>
+  <tabstop>btn_save</tabstop>
  </tabstops>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
+  <buttongroup name="bg_fxe_scan_type"/>
+  <buttongroup name="bg_fxe_detector"/>
+  <buttongroup name="bg_sacla_scan_type"/>
+  <buttongroup name="bg_sacla_detector"/>
+  <buttongroup name="bg_raw_mode"/>
  </buttongroups>
 </ui>
